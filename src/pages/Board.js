@@ -7,15 +7,19 @@ const Board = () => {
   const [grid, setGrid] = useState([]);
   const [nonMinecount, setNonMinecount] = useState(0);
   const [mineLocation, setmineLocation] = useState([]);
+  const [newGame, setNewGame] = useState(false);
+  const [mineCount, setMineCount] = useState(0);
+  const [flaggedMineCount, setFlaggedMineCount] = useState(0);
 
   useEffect(() => {
     freshBoard();
-  }, []);
+  }, [newGame]);
 
   const freshBoard = () => {
     const newBoard = CreateBoard(10, 10, 10);
     setNonMinecount(10 * 10 - 10);
-    // console.log(newBoard.mineLocation);
+    setMineCount(10);
+    setFlaggedMineCount(0);
     setmineLocation(newBoard.mineLocation);
     setGrid(newBoard.board);
   };
@@ -26,13 +30,21 @@ const Board = () => {
     let newGrid = JSON.parse(JSON.stringify(grid));
     newGrid[x][y].flagged = true;
     console.log(newGrid[x][y]);
+    if (newGrid[x][y].flagged === true && newGrid[x][y].value === "X") {
+      setFlaggedMineCount(flaggedMineCount + 1);
+      console.log(flaggedMineCount);
+    }
+    if (flaggedMineCount === mineCount) {
+      alert("You win!");
+    }
+    console.log("Flagged mines: " + flaggedMineCount);
     setGrid(newGrid);
   };
 
   const revealCell = (x, y) => {
     let newGrid = JSON.parse(JSON.stringify(grid));
     if (newGrid[x][y].value === "X") {
-      alert("You stepped on the wrong square.");
+      alert("You have stepped on a mine.");
       for (let i = 0; i < mineLocation.length; i++) {
         newGrid[mineLocation[i][0]][mineLocation[i][1]].revealed = true;
       }
@@ -43,10 +55,18 @@ const Board = () => {
       setNonMinecount(revealedboard.newNonMines);
     }
   };
+
+  const handleNewGame = () => {
+    setNewGame((current) => !current);
+  };
+
   return (
     <div className="parent">
       <div style={{ color: "white", textAlign: "center", fontSize: "35px" }}>
-        Non-Mines : {nonMinecount}
+        <p></p>
+        <button className="new-game-button" onClick={handleNewGame}>
+          New Game
+        </button>
       </div>
       <div>
         {grid.map((singlerow, index1) => {

@@ -12,3 +12,7 @@
   border: 2px solid rgb(84, 84, 128);
   align-items: center;
 }
+
+.new-game-button {
+  background-color: rgb(131, 86, 234);
+}
