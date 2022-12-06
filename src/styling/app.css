@@ -1,0 +1,7 @@
+@import "./board.css";
+@import "./cell.css";
+@import "./timer.css";
+
+* {
+  background-color: black;
+}
